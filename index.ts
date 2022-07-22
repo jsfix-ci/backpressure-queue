@@ -46,7 +46,7 @@ export function writableQueue(opts: WritableQueueOpts) {
   let expectedDesaturations = 0
   let writerCallback = (errorOrNull: Error | null) => {}
 
-  q.unsaturated = function() {
+  q.unsaturated(function() {
     // this probably does bad things if multiple Writables overwrite the func
     // we're safe, since a single Writable is strictly sequential
     try {
@@ -57,7 +57,7 @@ export function writableQueue(opts: WritableQueueOpts) {
     } catch (error) {
       // we're doing something wrong here
     }
-  }
+  })
 
   function write(
     chunk: any,
@@ -90,9 +90,9 @@ export function writableQueue(opts: WritableQueueOpts) {
       return
     }
 
-    q.drain = () => {
+    q.drain(() => {
       callback(null)
-    }
+    })
   }
 
   return new Writable(wopts)
